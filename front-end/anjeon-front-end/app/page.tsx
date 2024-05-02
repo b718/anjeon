@@ -4,13 +4,15 @@ import InputIcon from "@mui/icons-material/Input";
 import React, { useEffect, useState } from "react";
 
 const AnjeonHomepage = () => {
-  const [userInput, setUserInput] = useState<string>("");
+  const [userNamesInput, setUserNamesInput] = useState<string>("");
+  const [userTextInput, setUserTextInput] = useState<string>("");
 
   const sendUserInput = async (e: any) => {
     e.preventDefault();
 
     const userObject = {
-      userInput: userInput,
+      userNames: userNamesInput,
+      userText: userTextInput,
     };
 
     const sendRequest = await fetch("http://localhost:5000/api/v1/analyze", {
@@ -21,7 +23,8 @@ const AnjeonHomepage = () => {
       },
     });
 
-    setUserInput("");
+    setUserNamesInput("");
+    setUserTextInput("");
   };
 
   return (
@@ -39,15 +42,26 @@ const AnjeonHomepage = () => {
           rounded-2xl border-2 bg-white mt-[30vh]"
         >
           <TextareaAutosize
-            className="focus:outline-none font-sans min-w-[20vw] resize-none text-xs"
-            placeholder="Analyze with anjeon .."
+            className="focus:outline-none font-sans min-w-[10vw] resize-none text-xs border-r-2"
+            placeholder="Names of users .."
             minRows={1}
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
+            value={userNamesInput}
+            onChange={(e) => setUserNamesInput(e.target.value)}
+          />
+          <TextareaAutosize
+            className="focus:outline-none font-sans min-w-[20vw] resize-none text-xs pl-1"
+            placeholder="Text to analyze .."
+            minRows={1}
+            value={userTextInput}
+            onChange={(e) => setUserTextInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendUserInput(e)}
           />
 
-          <InputIcon className="font-sans text-slate-400 text-base" />
+          <InputIcon
+            className={`font-sans ${
+              userTextInput.length > 0 ? " text-slate-900" : "text-slate-400"
+            } text-base`}
+          />
         </div>
       </div>
     </main>
