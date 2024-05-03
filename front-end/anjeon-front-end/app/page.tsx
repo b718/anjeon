@@ -2,20 +2,22 @@
 import { Avatar, TextareaAutosize } from "@mui/material";
 import InputIcon from "@mui/icons-material/Input";
 import React, { useEffect, useState } from "react";
+import "./AnjeonHomepage.css";
 
 const AnjeonHomepage = () => {
   const [userNamesInput, setUserNamesInput] = useState<string>("");
   const [userTextInput, setUserTextInput] = useState<string>("");
+  const [responseProbability, setResponseProbability] = useState<number>(0);
 
   const sendUserInput = async (e: any) => {
     e.preventDefault();
 
     const userObject = {
-      userNames: userNamesInput,
-      userText: userTextInput,
+      userNameInput: userNamesInput,
+      userTextInput: userTextInput,
     };
 
-    const sendRequest = await fetch("http://localhost:5000/api/v1/analyze", {
+    const sendRequest = await fetch("http://localhost:8080/analyze-data", {
       method: "POST",
       body: JSON.stringify(userObject),
       headers: {
@@ -23,12 +25,15 @@ const AnjeonHomepage = () => {
       },
     });
 
+    const response = await sendRequest.json();
+    setResponseProbability(response.probability);
+
     setUserNamesInput("");
     setUserTextInput("");
   };
 
   return (
-    <main className="flex flex-col items-center text-black h-svh bg-gradient-to-r from-indigo-100 to-transparent">
+    <main className="flex flex-col items-center text-black h-[100vh] bg-gradient-to-r from-indigo-100 to-transparent">
       <div className="flex flex-col items-center mt-10">
         <text className="font-sans text-3xl font-light"> anjeon </text>
 
@@ -42,16 +47,18 @@ const AnjeonHomepage = () => {
           rounded-2xl border-2 bg-white mt-[30vh]"
         >
           <TextareaAutosize
-            className="focus:outline-none font-sans min-w-[10vw] resize-none text-xs border-r-2"
+            className="anjeonHompageScrollBar focus:outline-none font-sans min-w-[10vw] resize-none text-xs border-r-2"
             placeholder="Names of users .."
             minRows={1}
             value={userNamesInput}
             onChange={(e) => setUserNamesInput(e.target.value)}
           />
+
           <TextareaAutosize
-            className="focus:outline-none font-sans min-w-[20vw] resize-none text-xs pl-1"
+            className="anjeonHompageScrollBar focus:outline-none font-sans min-w-[20vw] resize-none text-xs pl-1 scroll-b"
             placeholder="Text to analyze .."
             minRows={1}
+            maxRows={12}
             value={userTextInput}
             onChange={(e) => setUserTextInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendUserInput(e)}

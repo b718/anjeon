@@ -1,9 +1,9 @@
 package anjeon.javabackend.UtilsAPI;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class UtilsAPI {
 
@@ -17,9 +17,40 @@ public class UtilsAPI {
     return result;
   }
 
-  public static List<String> findUserDialogues(String input, List<String> users) {
-    Set<String> userSet = new HashSet<>(users);
+  public static Map<String, List<String>> findUserDialogues(String input, List<String> users) {
+    Map<String, List<String>> userDialogueMap = new HashMap<>();
 
-    return null;
+    for (String name : users) {
+      userDialogueMap.put(name, new ArrayList<>());
+    }
+
+    List<String> userTextInputSplit = List.of(input.toLowerCase().split("\n"));
+
+    String currentUser = "";
+
+    for (String query : userTextInputSplit) {
+      boolean foundUser = false;
+
+      for (int i = 0; i < query.length(); i++) {
+        String currentQuery = query.substring(0, i);
+
+        if (userDialogueMap.containsKey(currentQuery) && !currentUser.equals(currentQuery)) {
+          userDialogueMap.get(currentQuery).add(query.substring(i));
+
+          if (!currentUser.isEmpty()) {
+            userDialogueMap.get(currentUser).add(query.substring(i));
+          }
+
+          currentUser = currentQuery;
+          foundUser = true;
+        }
+      }
+
+      if (!foundUser && !currentUser.isEmpty()) {
+        userDialogueMap.get(currentUser).add(query);
+      }
+    }
+
+    return userDialogueMap;
   }
 }
