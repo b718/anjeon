@@ -2,5 +2,4 @@ pandas
 numpy
 scikit-learn
 stop-words
-SVC
-RandomForestClassifier
+flask
