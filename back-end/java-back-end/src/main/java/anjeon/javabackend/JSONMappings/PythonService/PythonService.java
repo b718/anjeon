@@ -1,22 +1,17 @@
 package anjeon.javabackend.JSONMappings.PythonService;
 
+import anjeon.javabackend.JSONMappings.UserAndDialogue.UserAndDialogue;
 import java.util.List;
 
 public class PythonService {
   private String id;
-  private List<String> userNameInput;
-  private List<String> userTextInput;
+  private List<UserAndDialogue> usersAndDialogues;
 
-  public PythonService(List<String> userNameInput, List<String> userTextInput) {
-    this.userNameInput = userNameInput;
-    this.userTextInput = userTextInput;
+  public PythonService(List<UserAndDialogue> usersAndDialogues) {
+    this.usersAndDialogues = usersAndDialogues;
   }
 
-  public List<String> getUserNameInput() {
-    return userNameInput;
-  }
-
-  public List<String> getUserTextInput() {
-    return userTextInput;
+  public List<UserAndDialogue> getUsersAndDialogues() {
+    return usersAndDialogues;
   }
 }
