@@ -2,17 +2,28 @@ package anjeon.javabackend.UtilsAPI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import anjeon.javabackend.JSONMappings.Analysis.Analysis;
+import anjeon.javabackend.JSONMappings.AnalysisList.AnalysisList;
+import anjeon.javabackend.JSONMappings.AnalysisText.AnalysisText;
 import anjeon.javabackend.JSONMappings.PythonService.PythonService;
 import anjeon.javabackend.JSONMappings.UserAndDialogue.UserAndDialogue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class UtilsAPITests {
+  private static Gson gson;
+
+  @BeforeAll
+  static void setUp() {
+    gson = new GsonBuilder().setPrettyPrinting().create();
+  }
 
   @Test
   void checkStringSplits() {
@@ -47,12 +58,30 @@ public class UtilsAPITests {
       userAndDialogueList.add(new UserAndDialogue(key, userToDialogueMap.get(key)));
     }
 
-    String pythonServiceJSON =
-        new GsonBuilder()
-            .setPrettyPrinting()
-            .create()
-            .toJson(new PythonService(userAndDialogueList));
+    String pythonServiceJSON = gson.toJson(new PythonService(userAndDialogueList));
 
     System.out.println(pythonServiceJSON);
+  }
+
+  @Test
+  void getUserAndDialogueObjectList() {
+    Map<String, List<String>> userToDialogueMap =
+        Map.of("dabin", List.of("hello", "world"), "tyrone", List.of("hi", "there"));
+    List<UserAndDialogue> userAndDialogueList =
+        UtilsAPI.getUserAndDialogueObjectList(userToDialogueMap);
+
+    List<Analysis> analysisList = new ArrayList<>();
+    List<AnalysisText> analysisTextList;
+
+    for (UserAndDialogue userAndDialogue : userAndDialogueList) {
+      analysisTextList = new ArrayList<>();
+      for (String dialogue : userAndDialogue.getDialogues()) {
+        analysisTextList.add(new AnalysisText("60%", dialogue));
+      }
+
+      analysisList.add(new Analysis(userAndDialogue.getUser(), analysisTextList));
+    }
+
+    System.out.println(gson.toJson(new AnalysisList(analysisList)));
   }
 }

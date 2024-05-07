@@ -13,8 +13,11 @@ can download it from [Gradle](https://gradle.org/install/).
   string. The input string is separated by a comma.
 - `  public static Map<String, List<String>> findUserDialogues(String input, List<String> users)` :
   Find the dialogues of the users in the input string. The input string is separated by a comma. We
-  return a map of the user and the list of dialogues of the user so we can easily access it in the
+  return a map of the user and the list of dialogues of the user, so we can easily access it in the
   endpoints.
+- `  public static List<UserAndDialogue> getUserAndDialogueObjectList(
+  Map<String, List<String>> userToDialogueMap)` : Use the HashMap to group each user and their
+  dialogues to prepare to send to Python Service to analyze probabilities of bullying text.
 
 ## AnjeonController
 

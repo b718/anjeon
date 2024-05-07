@@ -1,5 +1,6 @@
 package anjeon.javabackend.UtilsAPI;
 
+import anjeon.javabackend.JSONMappings.UserAndDialogue.UserAndDialogue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,5 +53,22 @@ public class UtilsAPI {
     }
 
     return userDialogueMap;
+  }
+
+  public static List<UserAndDialogue> getUserAndDialogueObjectList(
+      Map<String, List<String>> userToDialogueMap) {
+    List<UserAndDialogue> userAndDialogueList = new ArrayList<>();
+
+    for (String key : userToDialogueMap.keySet()) {
+      List<String> value = userToDialogueMap.get(key);
+
+      if (value.isEmpty()) {
+        continue;
+      }
+
+      userAndDialogueList.add(new UserAndDialogue(key, userToDialogueMap.get(key)));
+    }
+
+    return userAndDialogueList;
   }
 }
