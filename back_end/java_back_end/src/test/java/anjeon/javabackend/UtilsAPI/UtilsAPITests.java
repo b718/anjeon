@@ -76,7 +76,7 @@ public class UtilsAPITests {
     for (UserAndDialogue userAndDialogue : userAndDialogueList) {
       analysisTextList = new ArrayList<>();
       for (String dialogue : userAndDialogue.getDialogues()) {
-        analysisTextList.add(new AnalysisText("60%", dialogue));
+        analysisTextList.add(new AnalysisText("60%", "40%", dialogue));
       }
 
       analysisList.add(new Analysis(userAndDialogue.getUser(), analysisTextList));
