@@ -5,14 +5,13 @@ import re
 import sklearn  
 import sklearn.model_selection
 
-class word_to_features:
+class WordsToFeatures:
     # In this class, 0 means not cyberbullying and 1 means cyberbullying
     def __init__(self):
-        self.__bullying_data_frame = pd.read_csv("../data/cyberbullying_tweets.csv")
+        self.__bullying_data_frame = pd.read_csv("data/cyberbullying_tweets.csv")
         self.stop_words_set = set(sw.get_stop_words("en"))
         self.__clean_bully_data_frame()
         self.split_data()
-
 
     def __clean_bully_data_frame(self):
         self.__bullying_data_frame["cyberbullying_type"] = self.__bullying_data_frame["cyberbullying_type"].apply(lambda label: 0 if label == "not_cyberbullying" else 1)
