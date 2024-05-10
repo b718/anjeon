@@ -14,4 +14,5 @@ class SvmRbf:
         self.pipeLine.fit(X_train, y_train)
 
     def predict(self, text):
-        pass
+        return self.pipeLine.predict_proba([text])[0]
+        

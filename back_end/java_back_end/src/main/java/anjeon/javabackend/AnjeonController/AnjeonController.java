@@ -20,7 +20,7 @@ public class AnjeonController {
 
   private final Gson gson;
   private final WebClient webClient;
-  private final String pythonServiceURL = "http://localhost:5000";
+  private final String pythonServiceURL = "http://127.0.0.1:8000";
 
   public AnjeonController(Gson gson) {
     this.gson = gson;
