@@ -8,6 +8,7 @@ import anjeon.javabackend.UtilsAPI.UtilsAPI;
 import com.google.gson.Gson;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +21,14 @@ public class AnjeonController {
 
   private final Gson gson;
   private final WebClient webClient;
-  private final String pythonServiceURL = "http://localhost:5000";
+  private final String pythonServiceURL = "http://127.0.0.1:8000";
 
   public AnjeonController(Gson gson) {
     this.gson = gson;
     this.webClient = WebClient.create(pythonServiceURL);
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = "*")
   @PostMapping("/analyze-data")
   public ResponseEntity<AnalysisList> analyzeData(@RequestBody UserInputJSON userInputJSON) {
     List<String> userNameInput = UtilsAPI.changeString(userInputJSON.getUserNameInput());
@@ -39,16 +40,18 @@ public class AnjeonController {
     String pythonServiceBody = gson.toJson(new PythonService(userAndDialogueList));
 
     // Send request to python here!
-    AnalysisList pythonServiceResponse =
+    String pythonServiceResponse =
         webClient
             .post()
-            .uri("/analyze-data")
+            .uri("/analyze-probability")
             .header("Content-Type", "application/json")
             .bodyValue(pythonServiceBody)
+            .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(AnalysisList.class)
+            .bodyToMono(String.class)
             .block();
 
-    return ResponseEntity.ok(pythonServiceResponse);
+    AnalysisList response = gson.fromJson(pythonServiceResponse, AnalysisList.class);
+    return ResponseEntity.ok(response);
   }
 }

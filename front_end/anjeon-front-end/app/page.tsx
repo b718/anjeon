@@ -26,6 +26,7 @@ const AnjeonHomepage = () => {
     });
 
     const response = await sendRequest.json();
+    console.log(response);
     setResponseProbability(response.probability);
 
     setUserNamesInput("");

@@ -4,7 +4,6 @@ import stop_words as sw
 import re
 import sklearn  
 import sklearn.model_selection
-
 class WordsToFeatures:
     # In this class, 0 means not cyberbullying and 1 means cyberbullying
     def __init__(self):

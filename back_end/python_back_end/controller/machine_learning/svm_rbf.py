@@ -6,7 +6,7 @@ class SvmRbf:
     def __init__(self, X_train, y_train):
         self.pipeLine = Pipeline(
             steps=[('bag_of_words', CountVectorizer()),
-                    ('svm_rbf', SVC(kernel='rbf'))]
+                    ('svm_rbf', SVC(kernel='rbf', probability=True))]
             )
         self.train(X_train, y_train)
     
@@ -14,4 +14,5 @@ class SvmRbf:
         self.pipeLine.fit(X_train, y_train)
 
     def predict(self, text):
-        pass
+        return self.pipeLine.predict_proba([text])[0]
+        
