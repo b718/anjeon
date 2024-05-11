@@ -10,7 +10,6 @@ public class JavaBackEndApplication {
     try {
       SpringApplication.run(JavaBackEndApplication.class, args);
       System.out.println("Anjeon On!");
-
     } catch (Exception e) {
       e.printStackTrace();
     }

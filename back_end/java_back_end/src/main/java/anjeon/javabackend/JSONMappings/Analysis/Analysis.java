@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Analysis {
   private String id;
-  private String name;
   private List<AnalysisText> analysis;
+  private String name;
 
   public Analysis(String name, List<AnalysisText> analysisTextList) {
     this.name = name;

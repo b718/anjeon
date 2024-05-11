@@ -1,6 +1,7 @@
 package anjeon.javabackend.JSONMappings.AnalysisList;
 
 import anjeon.javabackend.JSONMappings.Analysis.Analysis;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class AnalysisList {
@@ -8,11 +9,11 @@ public class AnalysisList {
   private String id;
   private List<Analysis> analyses;
 
-  public AnalysisList(List<Analysis> analysisList) {
+  public AnalysisList(@JsonProperty("analyses") List<Analysis> analysisList) {
     this.analyses = analysisList;
   }
 
-  public List<Analysis> getAnalysesa() {
+  public List<Analysis> getAnalyses() {
     return analyses;
   }
 }

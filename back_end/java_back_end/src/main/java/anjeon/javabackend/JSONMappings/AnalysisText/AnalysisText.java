@@ -3,8 +3,8 @@ package anjeon.javabackend.JSONMappings.AnalysisText;
 public class AnalysisText {
 
   private String id;
-  private String not_bullying_probability;
   private String bullying_probability;
+  private String not_bullying_probability;
   private String text;
 
   public AnalysisText(String not_bullying_probability, String bullying_probability, String text) {
