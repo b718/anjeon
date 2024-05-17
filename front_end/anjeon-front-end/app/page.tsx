@@ -1,13 +1,16 @@
 "use client";
-import { Avatar, TextareaAutosize } from "@mui/material";
+import { CircularProgress, TextareaAutosize } from "@mui/material";
 import InputIcon from "@mui/icons-material/Input";
 import React, { useEffect, useState } from "react";
 import "./AnjeonHomepage.css";
+import { Analysis } from "@/utils/Types";
+import RenderAnalysis from "./(utils)/page";
 
 const AnjeonHomepage = () => {
   const [userNamesInput, setUserNamesInput] = useState<string>("");
   const [userTextInput, setUserTextInput] = useState<string>("");
-  const [responseProbability, setResponseProbability] = useState<number>(0);
+  const [responseProbability, setResponseProbability] = useState<Analysis[]>();
+  const [isLoaded, setIsLoaded] = useState<string>("");
 
   const sendUserInput = async (e: any) => {
     e.preventDefault();
@@ -17,24 +20,29 @@ const AnjeonHomepage = () => {
       userTextInput: userTextInput,
     };
 
+    setIsLoaded("loading");
     const sendRequest = await fetch("http://localhost:8080/analyze-data", {
       method: "POST",
       body: JSON.stringify(userObject),
       headers: {
         "Content-Type": "application/json",
       },
+    }).then(async (response) => {
+      const result = await response.json();
+      setResponseProbability(result.analyses);
+      setIsLoaded("loaded");
     });
-
-    const response = await sendRequest.json();
-    console.log(response);
-    setResponseProbability(response.probability);
 
     setUserNamesInput("");
     setUserTextInput("");
   };
 
+  useEffect(() => {
+    console.log(responseProbability);
+  }, [responseProbability]);
+
   return (
-    <main className="flex flex-col items-center text-black h-[100vh] bg-gradient-to-r from-indigo-100 to-transparent">
+    <main className="flex flex-col items-center text-white pb-5">
       <div className="flex flex-col items-center mt-10">
         <text className="font-sans text-3xl font-light"> anjeon </text>
 
@@ -44,12 +52,12 @@ const AnjeonHomepage = () => {
         </text>
 
         <div
-          className="flex flex-row items-end p-2 border-slate-400 
-          rounded-2xl border-2 bg-white mt-[30vh]"
+          className="flex flex-row items-end p-2 border-neutral-400 
+          rounded-2xl border-2  bg-neutral-900 mt-[30vh]"
         >
           <TextareaAutosize
-            className="anjeonHompageScrollBar focus:outline-none font-sans min-w-[10vw] resize-none text-xs border-r-2"
-            placeholder="Names of users .."
+            className="anjeonHompageScrollBar focus:outline-none font-sans min-w-[11vw] resize-none text-xs border-neutral-400 border-r-2 pr-1"
+            placeholder="Names of users (delimit with ,)"
             minRows={1}
             value={userNamesInput}
             onChange={(e) => setUserNamesInput(e.target.value)}
@@ -66,12 +74,24 @@ const AnjeonHomepage = () => {
           />
 
           <InputIcon
-            className={`font-sans ${
-              userTextInput.length > 0 ? " text-slate-900" : "text-slate-400"
+            className={`font-sans transition ${
+              userTextInput.length > 0
+                ? " text-neutral-400"
+                : "text-neutral-800"
             } text-base`}
           />
         </div>
       </div>
+
+      {responseProbability &&
+      responseProbability.length > 0 &&
+      isLoaded === "loaded" ? (
+        <RenderAnalysis analysisList={responseProbability} />
+      ) : (
+        isLoaded === "loading" && (
+          <CircularProgress className="mt-5 text-white" />
+        )
+      )}
     </main>
   );
 };

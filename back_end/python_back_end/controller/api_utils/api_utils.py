@@ -26,8 +26,8 @@ class ApiUtilities:
 
                 probabilityOfBullying /= len(modelList) 
                 analysisTextMap["text"] = dialog
-                analysisTextMap["not_bullying_probability"] = str(round((1 - probabilityOfBullying) * 100, 2)) + "%"
-                analysisTextMap["bullying_probability"] = str(round(probabilityOfBullying * 100, 2)) + "%"
+                analysisTextMap["not_bullying_probability"] = '{:.2f}'.format((1 - probabilityOfBullying) * 100) + "%"
+                analysisTextMap["bullying_probability"] = '{:.2f}'.format(probabilityOfBullying * 100) + "%"
                 nameAndAnalysisMap["analysis"].append(analysisTextMap)
 
             userDialogueList.append(nameAndAnalysisMap)
