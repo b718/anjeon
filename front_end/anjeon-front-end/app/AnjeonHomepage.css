@@ -1,4 +1,8 @@
 .anjeonHompageScrollBar {
   scrollbar-width: thin;
-  background-color: white;
+  background-color: rgb(23 23 23);
+}
+
+.anjeonHompageScrollBar::placeholder {
+  color: rgb(215, 215, 215);
 }
