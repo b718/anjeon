@@ -1,13 +1,9 @@
 package anjeon.javabackend.AnjeonController;
 
-import anjeon.javabackend.JSONMappings.AnalysisList.AnalysisList;
+import anjeon.javabackend.JSONMappings.Analysis.Analysis;
 import anjeon.javabackend.JSONMappings.PythonService.PythonService;
-import anjeon.javabackend.JSONMappings.UserAndDialogue.UserAndDialogue;
 import anjeon.javabackend.JSONMappings.UserInputJSON.UserInputJSON;
-import anjeon.javabackend.UtilsAPI.UtilsAPI;
 import com.google.gson.Gson;
-import java.util.List;
-import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,15 +26,8 @@ public class AnjeonController {
 
   @CrossOrigin(origins = "*")
   @PostMapping("/analyze-data")
-  public ResponseEntity<AnalysisList> analyzeData(@RequestBody UserInputJSON userInputJSON) {
-    List<String> userNameInput = UtilsAPI.changeString(userInputJSON.getUserNameInput());
-    Map<String, List<String>> userToDialogueMap =
-        UtilsAPI.findUserDialogues(userInputJSON.getUserTextInput(), userNameInput);
-    List<UserAndDialogue> userAndDialogueList =
-        UtilsAPI.getUserAndDialogueObjectList(userToDialogueMap);
-
-    String pythonServiceBody = gson.toJson(new PythonService(userAndDialogueList));
-
+  public ResponseEntity<Analysis> analyzeData(@RequestBody UserInputJSON userInputJson) {
+    String pythonServiceBody = gson.toJson(new PythonService(userInputJson.getText()));
     // Send request to python here!
     String pythonServiceResponse =
         webClient
@@ -50,8 +39,7 @@ public class AnjeonController {
             .retrieve()
             .bodyToMono(String.class)
             .block();
-
-    AnalysisList response = gson.fromJson(pythonServiceResponse, AnalysisList.class);
+    Analysis response = gson.fromJson(pythonServiceResponse, Analysis.class);
     return ResponseEntity.ok(response);
   }
 }
