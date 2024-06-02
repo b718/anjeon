@@ -30,11 +30,10 @@ def startServer():
 
 @app.route("/analyze-probability", methods=["POST"])
 def analyzeProbability():
-    data = flask.request.get_json()["usersAndDialogues"]
-    nameMap = api_utils.ApiUtilities.userAndDialogueToDict(data)
+    data = flask.request.get_json()["text"]
     models = [randomForests, logisticRegression, svmRbf]
     JSONMap = collections.defaultdict(list)
-    JSONMap["analyses"] = api_utils.ApiUtilities.getProbabilites(nameMap, models)
+    JSONMap["analysis"] = api_utils.ApiUtilities.getProbabilites(data, models)
     return flask.jsonify(JSONMap), 200
 
 if (__name__ == "__main__"):

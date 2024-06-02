@@ -1,20 +1,16 @@
 package anjeon.javabackend.JSONMappings.UserInputJSON;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserInputJSON {
   private String id;
-  private String userNameInput;
-  private String userTextInput;
+  private String text;
 
-  public UserInputJSON(String userNameInput, String userTextInput) {
-    this.userNameInput = userNameInput;
-    this.userTextInput = userTextInput;
+  public UserInputJSON(@JsonProperty("text") String text) {
+    this.text = text;
   }
 
-  public String getUserNameInput() {
-    return userNameInput;
-  }
-
-  public String getUserTextInput() {
-    return userTextInput;
+  public String getText() {
+    return text;
   }
 }

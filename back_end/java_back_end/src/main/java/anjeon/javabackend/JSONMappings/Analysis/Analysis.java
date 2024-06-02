@@ -1,23 +1,16 @@
 package anjeon.javabackend.JSONMappings.Analysis;
 
 import anjeon.javabackend.JSONMappings.AnalysisText.AnalysisText;
-import java.util.List;
 
 public class Analysis {
   private String id;
-  private List<AnalysisText> analysis;
-  private String name;
+  private AnalysisText analysis;
 
-  public Analysis(String name, List<AnalysisText> analysisTextList) {
-    this.name = name;
-    this.analysis = analysisTextList;
+  public Analysis(AnalysisText analysisText) {
+    this.analysis = analysisText;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public List<AnalysisText> getAnalysisTextList() {
+  public AnalysisText getAnalysisText() {
     return analysis;
   }
 }

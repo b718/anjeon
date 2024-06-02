@@ -3,23 +3,24 @@ import { CircularProgress, TextareaAutosize } from "@mui/material";
 import InputIcon from "@mui/icons-material/Input";
 import React, { useEffect, useState } from "react";
 import "./AnjeonHomepage.css";
-import { Analysis } from "@/utils/Types";
+import { AnalysisText } from "@/utils/Types";
 import RenderAnalysis from "./(utils)/page";
 
 const AnjeonHomepage = () => {
-  const [userNamesInput, setUserNamesInput] = useState<string>("");
   const [userTextInput, setUserTextInput] = useState<string>("");
-  const [responseProbability, setResponseProbability] = useState<Analysis[]>();
+  const [responseProbability, setResponseProbability] = useState<
+    AnalysisText[]
+  >([]);
   const [isLoaded, setIsLoaded] = useState<string>("");
 
   const sendUserInput = async (e: any) => {
     e.preventDefault();
 
     const userObject = {
-      userNameInput: userNamesInput,
-      userTextInput: userTextInput,
+      text: userTextInput,
     };
 
+    console.log(userObject);
     setIsLoaded("loading");
     const sendRequest = await fetch("http://localhost:8080/analyze-data", {
       method: "POST",
@@ -29,11 +30,13 @@ const AnjeonHomepage = () => {
       },
     }).then(async (response) => {
       const result = await response.json();
-      setResponseProbability(result.analyses);
+      setResponseProbability((responseProbability) => [
+        ...responseProbability,
+        result.analysisText,
+      ]);
       setIsLoaded("loaded");
     });
 
-    setUserNamesInput("");
     setUserTextInput("");
   };
 
@@ -55,14 +58,6 @@ const AnjeonHomepage = () => {
           className="flex flex-row items-end p-2 border-neutral-400 
           rounded-2xl border-2  bg-neutral-900 mt-[30vh]"
         >
-          <TextareaAutosize
-            className="anjeonHompageScrollBar focus:outline-none font-sans min-w-[11vw] resize-none text-xs border-neutral-400 border-r-2 pr-1"
-            placeholder="Names of users (delimit with ,)"
-            minRows={1}
-            value={userNamesInput}
-            onChange={(e) => setUserNamesInput(e.target.value)}
-          />
-
           <TextareaAutosize
             className="anjeonHompageScrollBar focus:outline-none font-sans min-w-[20vw] resize-none text-xs pl-1 scroll-b"
             placeholder="Text to analyze .."
@@ -86,7 +81,7 @@ const AnjeonHomepage = () => {
       {responseProbability &&
       responseProbability.length > 0 &&
       isLoaded === "loaded" ? (
-        <RenderAnalysis analysisList={responseProbability} />
+        <RenderAnalysis analysisTextList={responseProbability} />
       ) : (
         isLoaded === "loading" && (
           <CircularProgress className="mt-5 text-white" />
