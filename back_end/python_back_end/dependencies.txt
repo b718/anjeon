@@ -5,3 +5,4 @@ scikit-learn
 stop-words
 flask
 flask_cors
+boto3
