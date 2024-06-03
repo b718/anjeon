@@ -21,7 +21,7 @@ public class UtilsAPITests {
     String text = "{userTextInput: 'asd'}";
     String json = gson.toJson(new UserInputJSON("asd"));
     UserInputJSON test = gson.fromJson(text, UserInputJSON.class);
-    System.out.println(test.getUserTextInput());
+    System.out.println(test.getText());
     System.out.println(json);
   }
 }
